@@ -15,9 +15,10 @@ class QuarterYearController extends Controller
     {
         try {
             $isPaginate = !empty($request->is_paginate) ? filter_var($request->query('is_paginate'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : true;
+            $search = $request->search;
 
             if ($isPaginate) {
-                $quarter_years = QuarterYear::paginate($request->per_page ?? 15);
+                $quarter_years = QuarterYear::with(relations: 'user')->where('year', 'like', '%'.$search.'%')->paginate($request->per_page ?? 15);
             } else {
                 $quarter_years = QuarterYear::all();
             }
@@ -48,6 +49,11 @@ class QuarterYearController extends Controller
         $user = Auth::user();
 
         try {
+            $year = QuarterYear::where('year', '=', $request->input('year'))->first();
+            if ($year) {
+                return response()->json(['error' => true, 'message' => 'Year already exist, please choose another year'], 406);
+            }
+
             $quarter_year = new QuarterYear();
             $quarter_year->created_by = $user->id;
             $quarter_year->year = $request->input('year');

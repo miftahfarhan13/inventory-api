@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('image_url')->nullable();
             $table->integer('price');
             $table->date('purchase_date')->nullable();
-            $table->date('repair_date')->nullable();
+            $table->integer('routine_repair_time')->nullable();
             $table->timestamps();
         });
     }

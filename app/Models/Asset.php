@@ -38,4 +38,14 @@ class Asset extends Model
     {
         return $this->hasOne(Location::class, 'id', 'location_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'created_by');
+    }
+
+    public function asset_improvements()
+    {
+        return $this->hasMany(AssetImprovement::class, 'asset_id', 'id');
+    }
 }

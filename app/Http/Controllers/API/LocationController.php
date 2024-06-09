@@ -17,7 +17,7 @@ class LocationController extends Controller
             $isPaginate = !empty($request->is_paginate) ? filter_var($request->query('is_paginate'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : true;
 
             if ($isPaginate) {
-                $locations = Location::with(relations: 'study_program')->paginate($request->per_page ?? 15);
+                $locations = Location::with(relations: ['study_program', 'user'])->paginate($request->per_page ?? 15);
             } else {
                 $locations = Location::with(relations: 'study_program')->get();
             }

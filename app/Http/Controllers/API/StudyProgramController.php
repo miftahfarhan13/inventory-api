@@ -15,9 +15,10 @@ class StudyProgramController extends Controller
     {
         try {
             $isPaginate = !empty($request->is_paginate) ? filter_var($request->query('is_paginate'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : true;
-
+            $search = $request->search;
+            
             if ($isPaginate) {
-                $study_programs = StudyProgram::paginate($request->per_page ?? 15);
+                $study_programs = StudyProgram::with(relations: 'user')->where('name', 'like', '%'.$search.'%')->paginate($request->per_page ?? 15);
             } else {
                 $study_programs = StudyProgram::all();
             }

@@ -14,11 +14,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('products', ProductController::class);
 });
 
+Route::post('update-user/{userId}', 'App\Http\Controllers\API\RegisterController@updateUser')->middleware('auth:sanctum');
+Route::post('register', 'App\Http\Controllers\API\RegisterController@register')->middleware('auth:sanctum');
 Route::get('me', 'App\Http\Controllers\API\RegisterController@me')->middleware('auth:sanctum');
-Route::get('logout', 'App\Http\Controllers\API\RegisterController@logout')->middleware('auth:sanctum');
+Route::post('logout', 'App\Http\Controllers\API\RegisterController@logout')->middleware('auth:sanctum');
 Route::delete('user/delete/{id}', 'App\Http\Controllers\API\RegisterController@deleteUser')->middleware('auth:sanctum');
 Route::post('upload-image', 'App\Http\Controllers\API\FileController@storeImage');
 Route::post('upload-file', 'App\Http\Controllers\API\FileController@storeFile');
+Route::get('users', 'App\Http\Controllers\API\RegisterController@getUsers')->middleware('auth:sanctum');
 
 Route::group([
     'prefix' => 'study-programs'

@@ -29,4 +29,9 @@ class Location extends Model
     {
         return $this->hasOne(StudyProgram::class, 'id', 'study_program_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'created_by');
+    }
 }

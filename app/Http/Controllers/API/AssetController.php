@@ -14,7 +14,7 @@ class AssetController extends Controller
     public function getAssetById($assetId)
     {
         try {
-            $asset = Asset::with(relations: ['category', 'location'])->where('category_id', '=', $assetId)->first();
+            $asset = Asset::with(relations: ['category', 'location', 'asset_improvements'])->where('id', '=', $assetId)->first();
             //return successful response
             return response()->json(['error' => false, 'result' => $asset], 200);
         } catch (\Exception $e) {
@@ -29,9 +29,9 @@ class AssetController extends Controller
             $isPaginate = !empty($request->is_paginate) ? filter_var($request->query('is_paginate'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : true;
 
             if ($isPaginate) {
-                $assets = Asset::with(relations: ['category', 'location'])->paginate($request->per_page ?? 15);
+                $assets = Asset::with(relations: ['category', 'location', 'user'])->paginate($request->per_page ?? 15);
             } else {
-                $assets = Asset::with(relations: ['category', 'location'])->get();
+                $assets = Asset::with(relations: ['category', 'location', 'user'])->get();
             }
             //return successful response
             return response()->json(['error' => false, 'result' => $assets], 200);
@@ -53,6 +53,11 @@ class AssetController extends Controller
 
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => $validator->errors()->first()], 406);
+        }
+
+        $get_asset = Asset::where('asset_code', '=', $request->asset_code)->first();
+        if ($get_asset) {
+            return response()->json(['error' => true, 'message' => "Kode aset sudah terpakai, silahkan masukkan kode aset lain"], 406);
         }
 
         $user = Auth::user();

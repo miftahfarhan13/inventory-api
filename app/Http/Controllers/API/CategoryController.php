@@ -15,11 +15,12 @@ class CategoryController extends Controller
     {
         try {
             $isPaginate = !empty($request->is_paginate) ? filter_var($request->query('is_paginate'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : true;
+            $search = $request->search;
 
             if ($isPaginate) {
-                $categories = Category::paginate($request->per_page ?? 15);
+                $categories = Category::with(relations: 'user')->where('name', 'like', '%'.$search.'%')->paginate($request->per_page ?? 15);
             } else {
-                $categories = Category::all();
+                $categories = Category::with(relations: 'user')->get();
             }
             //return successful response
             return response()->json(['error' => false, 'result' => $categories], 200);

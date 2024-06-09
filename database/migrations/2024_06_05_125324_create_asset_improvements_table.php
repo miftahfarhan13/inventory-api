@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('created_by')->references('id')->on('users');
             $table->integer('asset_id')->references('id')->on('assets');
+            $table->text('type');
             $table->text('status');
             $table->longText('description');
             $table->text('reporter');

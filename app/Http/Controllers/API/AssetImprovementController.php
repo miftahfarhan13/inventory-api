@@ -47,6 +47,7 @@ class AssetImprovementController extends Controller
             $asset_improvement = new AssetImprovement();
             $asset_improvement->created_by = $user->id;
             $asset_improvement->asset_id = $request->input('asset_id');
+            $asset_improvement->type = $request->input('type');
             $asset_improvement->status = $request->input('status');
             $asset_improvement->description = $request->input('description');
             $asset_improvement->reporter = $request->input('reporter');
@@ -91,6 +92,7 @@ class AssetImprovementController extends Controller
                 return response()->json(['error' => true, 'message' => 'AssetImprovement not found'], 406);
             }
             $asset_improvement->asset_id = $request->input('asset_id');
+            $asset_improvement->type = $request->input('type');
             $asset_improvement->status = $request->input('status');
             $asset_improvement->description = $request->input('description');
             $asset_improvement->reporter = $request->input('reporter');
