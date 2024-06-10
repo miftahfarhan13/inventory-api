@@ -27,11 +27,12 @@ class AssetController extends Controller
     {
         try {
             $isPaginate = !empty($request->is_paginate) ? filter_var($request->query('is_paginate'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : true;
-
+            $search = $request->search;
+            
             if ($isPaginate) {
-                $assets = Asset::with(relations: ['category', 'location', 'user'])->paginate($request->per_page ?? 15);
+                $assets = Asset::with(relations: ['category', 'location', 'user', 'asset_improvements'])->where('asset_code', 'like', '%'.$search.'%')->paginate($request->per_page ?? 15);
             } else {
-                $assets = Asset::with(relations: ['category', 'location', 'user'])->get();
+                $assets = Asset::with(relations: ['category', 'location', 'user', 'asset_improvements'])->get();
             }
             //return successful response
             return response()->json(['error' => false, 'result' => $assets], 200);
