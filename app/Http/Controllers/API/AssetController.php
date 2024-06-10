@@ -74,7 +74,7 @@ class AssetController extends Controller
             $asset->image_url = $request->input('image_url');
             $asset->price = $request->input('price');
             $asset->purchase_date = $request->input('purchase_date');
-            $asset->repair_date = $request->input('repair_date');
+            $asset->routine_repair_time = $request->input('routine_repair_time');
 
             $asset->save();
 
@@ -116,7 +116,7 @@ class AssetController extends Controller
             $asset->image_url = $request->input('image_url');
             $asset->price = $request->input('price');
             $asset->purchase_date = $request->input('purchase_date');
-            $asset->repair_date = $request->input('repair_date');
+            $asset->routine_repair_time = $request->input('routine_repair_time');
 
             $asset->save();
 
