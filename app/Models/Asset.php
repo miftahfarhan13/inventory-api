@@ -46,6 +46,11 @@ class Asset extends Model
 
     public function asset_improvements()
     {
-        return $this->hasMany(AssetImprovement::class, 'asset_id', 'id');
+        return $this->hasMany(AssetImprovement::class, 'asset_id', 'id')->orderBy('created_at', 'desc');
+    }
+
+    public function asset_improvements_total_price()
+    {
+        return $this->asset_improvements()->sum('improvement_price');
     }
 }

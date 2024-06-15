@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('asset_improvements', function (Blueprint $table) {
             $table->id();
             $table->integer('created_by')->references('id')->on('users');
+            $table->integer('approved_by')->references('id')->on('users');
             $table->integer('asset_id')->references('id')->on('assets');
             $table->text('type');
-            $table->text('status');
+            $table->text('status')->nullable();
             $table->longText('description');
             $table->text('reporter');
             $table->text('contact_reporter')->nullable();

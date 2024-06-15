@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Asset;
+use App\Models\QuarterYear;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -28,11 +29,83 @@ class AssetController extends Controller
         try {
             $isPaginate = !empty($request->is_paginate) ? filter_var($request->query('is_paginate'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : true;
             $search = $request->search;
-            
+            $locationId = $request->location_id;
+            $categoryId = $request->category_id;
+            $studyProgramId = $request->study_program_id;
+            $assetImprovementType = $request->asset_improvement_type;
+            $isTw1 = $request->is_tw_1;
+            $isTw2 = $request->is_tw_2;
+            $isTw3 = $request->is_tw_3;
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+
+            $currentYear = date("Y");
+
+            $queryYear = QuarterYear::where('year', '=', $currentYear)->first();
+            $startTw1 = $queryYear['start_tw_1'] ? $queryYear['start_tw_1'] : $currentYear . '01-01';
+            $endTw1 = $queryYear['end_tw_1'] ? $queryYear['end_tw_1'] : $currentYear . '04-30';
+
+            $startTw2 = $queryYear['start_tw_2'] ? $queryYear['start_tw_2'] : $currentYear . '05-01';
+            $endTw2 = $queryYear['end_tw_2'] ? $queryYear['end_tw_2'] : $currentYear . '08-31';
+
+            $startTw3 = $queryYear['start_tw_3'] ? $queryYear['start_tw_3'] : $currentYear . '09-01';
+            $endTw3 = $queryYear['end_tw_3'] ? $queryYear['end_tw_3'] : $currentYear . '12-31';
+
+            $query = Asset::with(relations: ['category', 'location', 'user', 'asset_improvements']);
+
+            if (!empty($startDate) && !empty($endDate)) {
+                $query->whereHas('asset_improvements', function ($q) use ($startDate, $endDate) {
+                    $q->whereBetween('asset_improvements.actual_repair_end_date', [$startDate, $endDate]);
+                });
+            }
+
+            if (!empty($isTw3)) {
+                $query->whereHas('asset_improvements', function ($q) use ($startTw3, $endTw3) {
+                    $q->whereBetween('asset_improvements.actual_repair_end_date', [$startTw3, $endTw3]);
+                });
+            }
+
+            if (!empty($isTw2)) {
+                $query->whereHas('asset_improvements', function ($q) use ($startTw2, $endTw2) {
+                    $q->whereBetween('asset_improvements.actual_repair_end_date', [$startTw2, $endTw2]);
+                });
+            }
+
+            if (!empty($isTw1)) {
+                $query->whereHas('asset_improvements', function ($q) use ($startTw1, $endTw1) {
+                    $q->whereBetween('asset_improvements.actual_repair_end_date', [$startTw1, $endTw1]);
+                });
+            }
+
+            $arrayTypes = explode(",", $assetImprovementType);
+            if (!empty($assetImprovementType) && is_array($arrayTypes)) {
+                $query->whereHas('asset_improvements', function ($q) use ($arrayTypes) {
+                    $q->whereIn('asset_improvements.type', $arrayTypes);
+                });
+            }
+
+            if (!empty($studyProgramId)) {
+                $query->whereHas('location', function ($q) use ($studyProgramId) {
+                    $q->where('locations.study_program_id', $studyProgramId);
+                });
+            }
+
+            if (!empty($categoryId)) {
+                $query->where('category_id', '=', $categoryId);
+            }
+
+            if (!empty($locationId)) {
+                $query->where('location_id', '=', $locationId);
+            }
+
+            if (!empty($search)) {
+                $query->where('asset_code', 'like', '%' . $search . '%');
+            }
+
             if ($isPaginate) {
-                $assets = Asset::with(relations: ['category', 'location', 'user', 'asset_improvements'])->where('asset_code', 'like', '%'.$search.'%')->paginate($request->per_page ?? 15);
+                $assets = $query->paginate($request->per_page ?? 15);
             } else {
-                $assets = Asset::with(relations: ['category', 'location', 'user', 'asset_improvements'])->get();
+                $assets = $query->get();
             }
             //return successful response
             return response()->json(['error' => false, 'result' => $assets], 200);

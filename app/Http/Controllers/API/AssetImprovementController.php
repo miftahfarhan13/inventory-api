@@ -29,6 +29,30 @@ class AssetImprovementController extends Controller
         }
     }
 
+    public function getAssetImprovementsByAssetId($assetId, Request $request)
+    {
+        try {
+            $isPaginate = !empty($request->is_paginate) ? filter_var($request->query('is_paginate'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : true;
+
+            $search = $request->search;
+
+            if ($isPaginate) {
+                $asset_improvements = AssetImprovement::with(relations: ['asset', 'user', 'approved_user'])
+                    ->whereHas('asset', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->where('asset_id', '=', $assetId)->paginate($request->per_page ?? 15);
+            } else {
+                $asset_improvements = AssetImprovement::with(relations: ['asset'])->get();
+            }
+            //return successful response
+            return response()->json(['error' => false, 'result' => $asset_improvements], 200);
+        } catch (\Exception $e) {
+            //return error message
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 406);
+        }
+    }
+
     public function createAssetImprovement(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -126,11 +150,14 @@ class AssetImprovementController extends Controller
             return response()->json(['error' => true, 'message' => $validator->errors()->first()], 406);
         }
 
+        $user = Auth::user();
+
         try {
             $asset_improvement = AssetImprovement::find($assetImprovementId);
             if (!$asset_improvement) {
                 return response()->json(['error' => true, 'message' => 'AssetImprovement not found'], 406);
             }
+            $asset_improvement->approved_by = $user->id;
             $asset_improvement->status = $request->input('status');
 
             $asset_improvement->save();

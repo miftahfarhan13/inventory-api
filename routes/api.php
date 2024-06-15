@@ -76,6 +76,7 @@ Route::group([
 ], function () {
     Route::get('/', 'App\Http\Controllers\API\AssetImprovementController@getAssetImprovements')->middleware('auth:sanctum');
     Route::post('/create', 'App\Http\Controllers\API\AssetImprovementController@createAssetImprovement')->middleware('auth:sanctum');
+    Route::get('asset/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@getAssetImprovementsByAssetId')->middleware('auth:sanctum');
     Route::post('update/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@updateAssetImprovement')->middleware('auth:sanctum');
     Route::post('update-status/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@updateAssetImprovementStatus')->middleware('auth:sanctum');
     Route::delete('delete/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@deleteAssetImprovement')->middleware('auth:sanctum');

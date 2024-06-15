@@ -28,4 +28,14 @@ class AssetImprovement extends Model
     {
         return $this->hasOne(Asset::class, 'id', 'asset_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'created_by');
+    }
+
+    public function approved_user()
+    {
+        return $this->hasOne(User::class, 'id', 'approved_by');
+    }
 }
