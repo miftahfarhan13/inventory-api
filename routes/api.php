@@ -81,3 +81,12 @@ Route::group([
     Route::post('update-status/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@updateAssetImprovementStatus')->middleware('auth:sanctum');
     Route::delete('delete/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@deleteAssetImprovement')->middleware('auth:sanctum');
 });
+
+Route::group([
+    'prefix' => 'dashboard'
+], function () {
+    Route::get('/total-asset-by-study-program', 'App\Http\Controllers\API\DashboardController@getTotalAssetByStudyProgram')->middleware('auth:sanctum');
+    Route::get('/asset-log-success', 'App\Http\Controllers\API\DashboardController@getAllAssetLogSuccess')->middleware('auth:sanctum');
+    Route::get('/total-price-improvement', 'App\Http\Controllers\API\DashboardController@getTotalImprovementPriceByQuartalYear')->middleware('auth:sanctum');
+    Route::get('/percentage-status', 'App\Http\Controllers\API\DashboardController@getPercentageStatusByQuartalYear')->middleware('auth:sanctum');
+});
