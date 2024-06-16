@@ -24,9 +24,24 @@ class AssetImprovement extends Model
      */
     protected $primaryKey = 'id';
 
-    public function asset()
+    public function asset_query()
     {
         return $this->hasOne(Asset::class, 'id', 'asset_id');
+    }
+
+    public function asset()
+    {
+        return $this->asset_query()->with('location');
+    }
+
+    public function location_asset()
+    {
+        return $this->hasOne(Location::class, 'id', 'location_id');
+    }
+
+    public function location()
+    {
+        return $this->location_asset()->with('study_program');
     }
 
     public function user()
