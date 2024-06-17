@@ -48,8 +48,9 @@ class AssetImprovementController extends Controller
                 $query->whereBetween('improvement_price', [(int)$priceStart, (int)$priceEnd]);
             }
 
-            if (!empty($status) ) {
-                $query->where('status', '=', $status);
+            $arrayStatus = explode(",", $status);
+            if (!empty($status) && is_array($arrayStatus)) {
+                $query->whereIn('status', $arrayStatus);
             }
 
             if (!empty($type) ) {
