@@ -121,6 +121,7 @@ class AssetController extends Controller
             'category_id' => 'required|integer',
             'location_id' => 'required|integer',
             'asset_code' => 'required|string',
+            'asset_uid' => 'required|string',
             'name' => 'required|string',
             'price' => 'required|integer',
         ]);
@@ -142,6 +143,7 @@ class AssetController extends Controller
             $asset->category_id = $request->input('category_id');
             $asset->location_id = $request->input('location_id');
             $asset->asset_code = $request->input('asset_code');
+            $asset->asset_uid = $request->input('asset_uid');
             $asset->name = $request->input('name');
             $asset->brand = $request->input('brand');
             $asset->vendor = $request->input('vendor');
@@ -168,6 +170,7 @@ class AssetController extends Controller
             'category_id' => 'required|integer',
             'location_id' => 'required|integer',
             'asset_code' => 'required|string',
+            'asset_uid' => 'required|string',
             'name' => 'required|string',
             'price' => 'required|integer',
         ]);
@@ -184,6 +187,7 @@ class AssetController extends Controller
             $asset->category_id = $request->input('category_id');
             $asset->location_id = $request->input('location_id');
             $asset->asset_code = $request->input('asset_code');
+            $asset->asset_uid = $request->input('asset_uid');
             $asset->name = $request->input('name');
             $asset->brand = $request->input('brand');
             $asset->vendor = $request->input('vendor');
