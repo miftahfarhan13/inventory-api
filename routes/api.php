@@ -79,6 +79,7 @@ Route::group([
     Route::get('asset/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@getAssetImprovementsByAssetId')->middleware('auth:sanctum');
     Route::post('update/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@updateAssetImprovement')->middleware('auth:sanctum');
     Route::post('update-status/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@updateAssetImprovementStatus')->middleware('auth:sanctum');
+    Route::post('update-dates/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@updateAssetImprovementDates')->middleware('auth:sanctum');
     Route::delete('delete/{assetId}', 'App\Http\Controllers\API\AssetImprovementController@deleteAssetImprovement')->middleware('auth:sanctum');
 });
 

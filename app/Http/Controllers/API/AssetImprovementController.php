@@ -245,8 +245,10 @@ class AssetImprovementController extends Controller
             $asset_improvement->repair_time_plan_date = $request->input('repair_time_plan_date');
             $asset_improvement->actual_repair_start_date = $request->input('actual_repair_start_date');
             $asset_improvement->actual_repair_end_date = $request->input('actual_repair_end_date');
-
-
+            $asset_improvement->revision = $request->input('revision');
+            $asset_improvement->urgency = $request->input('urgency');
+            $asset_improvement->asset_needed_date = $request->input('asset_needed_date');
+            $asset_improvement->target_repair_date = $request->input('target_repair_date');
             $asset_improvement->save();
 
             $asset_improvement = AssetImprovement::where('id', $asset_improvement->id)->first();
@@ -290,6 +292,10 @@ class AssetImprovementController extends Controller
             $asset_improvement->repair_time_plan_date = $request->input('repair_time_plan_date');
             $asset_improvement->actual_repair_start_date = $request->input('actual_repair_start_date');
             $asset_improvement->actual_repair_end_date = $request->input('actual_repair_end_date');
+            $asset_improvement->revision = $request->input('revision');
+            $asset_improvement->urgency = $request->input('urgency');
+            $asset_improvement->asset_needed_date = $request->input('asset_needed_date');
+            $asset_improvement->target_repair_date = $request->input('target_repair_date');
 
             $asset_improvement->save();
 
@@ -320,6 +326,34 @@ class AssetImprovementController extends Controller
             }
             $asset_improvement->approved_by = $user->id;
             $asset_improvement->status = $request->input('status');
+            $asset_improvement->revision = $request->input('revision');
+
+            $asset_improvement->save();
+
+            //return successful response
+            return response()->json(['error' => false, 'result' => $asset_improvement, 'message' => 'data saved'], 200);
+        } catch (\Exception $e) {
+            //return error message
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 406);
+        }
+    }
+
+    public function updateAssetImprovementDates($assetImprovementId, Request $request)
+    {
+        $user = Auth::user();
+        $target_repair_date = $request->input('target_repair_date');
+        $actual_repair_start_date = $request->input('actual_repair_start_date');
+        $actual_repair_end_date = $request->input('actual_repair_end_date');
+
+        try {
+            $asset_improvement = AssetImprovement::find($assetImprovementId);
+            if (!$asset_improvement) {
+                return response()->json(['error' => true, 'message' => 'AssetImprovement not found'], 406);
+            }
+            
+            if(!empty($target_repair_date)) $asset_improvement->target_repair_date = $target_repair_date;
+            if(!empty($actual_repair_start_date)) $asset_improvement->actual_repair_start_date = $actual_repair_start_date;
+            if(!empty($actual_repair_end_date)) $asset_improvement->actual_repair_end_date = $actual_repair_end_date;
 
             $asset_improvement->save();
 
