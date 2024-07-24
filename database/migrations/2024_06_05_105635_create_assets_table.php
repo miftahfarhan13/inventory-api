@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('category_id')->references('id')->on('categories');
             $table->integer('location_id')->references('id')->on('locations');
             $table->string('asset_code')->unique();
+            $table->string('asset_uid')->unique();
             $table->text('name');
             $table->text('brand')->nullable();
             $table->text('vendor')->nullable();

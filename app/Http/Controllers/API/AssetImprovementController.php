@@ -237,7 +237,7 @@ class AssetImprovementController extends Controller
             $asset_improvement->description = $request->input('description');
             $asset_improvement->reporter = $request->input('reporter');
             $asset_improvement->contact_reporter = $request->input('contact_reporter');
-            $asset_improvement->contact_technician = $request->input('contact_technician');
+            $asset_improvement->technician_name = $request->input('technician_name');
             $asset_improvement->improvement_price = $request->input('improvement_price');
             $asset_improvement->additional_document = $request->input('additional_document');
             $asset_improvement->report_date = $request->input('report_date');
@@ -282,7 +282,7 @@ class AssetImprovementController extends Controller
             $asset_improvement->description = $request->input('description');
             $asset_improvement->reporter = $request->input('reporter');
             $asset_improvement->contact_reporter = $request->input('contact_reporter');
-            $asset_improvement->contact_technician = $request->input('contact_technician');
+            $asset_improvement->technician_name = $request->input('technician_name');
             $asset_improvement->improvement_price = $request->input('improvement_price');
             $asset_improvement->additional_document = $request->input('additional_document');
             $asset_improvement->report_date = $request->input('report_date');

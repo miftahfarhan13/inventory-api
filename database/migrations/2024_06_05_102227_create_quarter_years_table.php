@@ -21,6 +21,8 @@ return new class extends Migration
             $table->date('end_tw_2');
             $table->date('start_tw_3');
             $table->date('end_tw_3');
+            $table->date('start_tw_4');
+            $table->date('end_tw_4');
             $table->timestamps();
         });
     }

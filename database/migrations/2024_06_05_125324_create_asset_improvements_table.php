@@ -18,17 +18,21 @@ return new class extends Migration
             $table->integer('asset_id')->references('id')->on('assets');
             $table->text('type');
             $table->text('status')->nullable();
+            $table->text('revision')->nullable();
             $table->longText('description');
             $table->text('reporter');
             $table->text('contact_reporter')->nullable();
-            $table->text('contact_technician')->nullable();
+            $table->text('technician_name')->nullable();
             $table->integer('improvement_price');
             $table->string('additional_document')->nullable();
+            $table->string('urgency')->nullable();
             $table->date('report_date')->nullable();
             $table->date('validation_by_laboratory_date')->nullable();
             $table->date('repair_time_plan_date')->nullable();
             $table->date('actual_repair_start_date')->nullable();
             $table->date('actual_repair_end_date')->nullable();
+            $table->date('asset_needed_date')->nullable();
+            $table->date('target_repair_date')->nullable();
             $table->timestamps();
         });
     }
