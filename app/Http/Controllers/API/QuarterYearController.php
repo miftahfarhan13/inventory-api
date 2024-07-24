@@ -40,6 +40,8 @@ class QuarterYearController extends Controller
             'end_tw_2' => 'required|date',
             'start_tw_3' => 'required|date',
             'end_tw_3' => 'required|date',
+            'start_tw_4' => 'required|date',
+            'end_tw_4' => 'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -63,6 +65,8 @@ class QuarterYearController extends Controller
             $quarter_year->end_tw_2 = $request->input('end_tw_2');
             $quarter_year->start_tw_3 = $request->input('start_tw_3');
             $quarter_year->end_tw_3 = $request->input('end_tw_3');
+            $quarter_year->start_tw_4 = $request->input('start_tw_4');
+            $quarter_year->end_tw_4 = $request->input('end_tw_4');
             $quarter_year->save();
 
             $quarter_year = QuarterYear::where('id', $quarter_year->id)->first();
@@ -85,6 +89,8 @@ class QuarterYearController extends Controller
             'end_tw_2' => 'required|date',
             'start_tw_3' => 'required|date',
             'end_tw_3' => 'required|date',
+            'start_tw_4' => 'required|date',
+            'end_tw_4' => 'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -103,7 +109,8 @@ class QuarterYearController extends Controller
             $quarter_year->end_tw_2 = $request->input('end_tw_2');
             $quarter_year->start_tw_3 = $request->input('start_tw_3');
             $quarter_year->end_tw_3 = $request->input('end_tw_3');
-
+            $quarter_year->start_tw_4 = $request->input('start_tw_4');
+            $quarter_year->end_tw_4 = $request->input('end_tw_4');
             $quarter_year->save();
 
             //return successful response
