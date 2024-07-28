@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('asset_code')->unique();
             $table->string('asset_uid')->unique();
             $table->text('name');
+            $table->text('status');
             $table->text('brand')->nullable();
             $table->text('vendor')->nullable();
             $table->text('image_url')->nullable();

@@ -9,7 +9,7 @@ class QuarterYear extends Model
 {
     use HasFactory;
 
-     /**
+    /**
      * The table associated with the model.
      *
      * @var string
@@ -23,6 +23,24 @@ class QuarterYear extends Model
      * @var string
      */
     protected $primaryKey = 'id';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'created_by',
+        'year',
+        'start_tw_1',
+        'end_tw_1',
+        'start_tw_2',
+        'end_tw_2',
+        'start_tw_3',
+        'end_tw_3',
+        'start_tw_4',
+        'end_tw_4',
+    ];
 
     public function user()
     {
