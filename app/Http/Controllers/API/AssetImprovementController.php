@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Asset;
 use App\Models\AssetImprovement;
-use App\Models\QuarterYear;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -17,9 +16,6 @@ class AssetImprovementController extends Controller
     {
         try {
             $isPaginate = !empty($request->is_paginate) ? filter_var($request->query('is_paginate'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : true;
-            $isTw1 = $request->is_tw_1;
-            $isTw2 = $request->is_tw_2;
-            $isTw3 = $request->is_tw_3;
             $startDate = $request->start_date;
             $endDate = $request->end_date;
             $search = $request->search;
@@ -30,18 +26,6 @@ class AssetImprovementController extends Controller
             $status = $request->status;
             $priceStart = $request->price_start;
             $priceEnd = $request->price_end;
-
-            $currentYear = date("Y");
-
-            $queryYear = QuarterYear::where('year', '=', $currentYear)->first();
-            $startTw1 = $queryYear['start_tw_1'] ? $queryYear['start_tw_1'] : $currentYear . '01-01';
-            $endTw1 = $queryYear['end_tw_1'] ? $queryYear['end_tw_1'] : $currentYear . '04-30';
-
-            $startTw2 = $queryYear['start_tw_2'] ? $queryYear['start_tw_2'] : $currentYear . '05-01';
-            $endTw2 = $queryYear['end_tw_2'] ? $queryYear['end_tw_2'] : $currentYear . '08-31';
-
-            $startTw3 = $queryYear['start_tw_3'] ? $queryYear['start_tw_3'] : $currentYear . '09-01';
-            $endTw3 = $queryYear['end_tw_3'] ? $queryYear['end_tw_3'] : $currentYear . '12-31';
 
             $query = AssetImprovement::with(relations: ['asset', 'user', 'approved_user']);
 
@@ -76,18 +60,6 @@ class AssetImprovementController extends Controller
                 $query->whereHas('asset', function ($q) use ($locationId) {
                     $q->where('location_id', '=', $locationId);
                 });
-            }
-
-            if (!empty($isTw3)) {
-                $query->whereBetween('actual_repair_end_date', [$startTw3, $endTw3]);
-            }
-
-            if (!empty($isTw2)) {
-                $query->whereBetween('actual_repair_end_date', [$startTw2, $endTw2]);
-            }
-
-            if (!empty($isTw1)) {
-                $query->whereBetween('actual_repair_end_date', [$startTw1, $endTw1]);
             }
 
             if (!empty($startDate) && !empty($endDate)) {
@@ -118,9 +90,6 @@ class AssetImprovementController extends Controller
     {
         try {
             $isPaginate = !empty($request->is_paginate) ? filter_var($request->query('is_paginate'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : true;
-            $isTw1 = $request->is_tw_1;
-            $isTw2 = $request->is_tw_2;
-            $isTw3 = $request->is_tw_3;
             $startDate = $request->start_date;
             $endDate = $request->end_date;
             $search = $request->search;
@@ -131,18 +100,6 @@ class AssetImprovementController extends Controller
             $status = $request->status;
             $priceStart = $request->price_start;
             $priceEnd = $request->price_end;
-
-            $currentYear = date("Y");
-
-            $queryYear = QuarterYear::where('year', '=', $currentYear)->first();
-            $startTw1 = $queryYear['start_tw_1'] ? $queryYear['start_tw_1'] : $currentYear . '01-01';
-            $endTw1 = $queryYear['end_tw_1'] ? $queryYear['end_tw_1'] : $currentYear . '04-30';
-
-            $startTw2 = $queryYear['start_tw_2'] ? $queryYear['start_tw_2'] : $currentYear . '05-01';
-            $endTw2 = $queryYear['end_tw_2'] ? $queryYear['end_tw_2'] : $currentYear . '08-31';
-
-            $startTw3 = $queryYear['start_tw_3'] ? $queryYear['start_tw_3'] : $currentYear . '09-01';
-            $endTw3 = $queryYear['end_tw_3'] ? $queryYear['end_tw_3'] : $currentYear . '12-31';
 
             $query = AssetImprovement::with(relations: ['asset', 'user', 'approved_user']);
 
@@ -179,18 +136,6 @@ class AssetImprovementController extends Controller
                 });
             }
 
-            if (!empty($isTw3)) {
-                $query->whereBetween('actual_repair_end_date', [$startTw3, $endTw3]);
-            }
-
-            if (!empty($isTw2)) {
-                $query->whereBetween('actual_repair_end_date', [$startTw2, $endTw2]);
-            }
-
-            if (!empty($isTw1)) {
-                $query->whereBetween('actual_repair_end_date', [$startTw1, $endTw1]);
-            }
-
             if (!empty($startDate) && !empty($endDate)) {
                 $query->whereBetween('actual_repair_end_date', [$startDate, $endDate]);
             }
@@ -204,7 +149,7 @@ class AssetImprovementController extends Controller
             if ($isPaginate) {
                 $asset_improvements = $query->where('asset_id', '=', $assetId)->paginate($request->per_page ?? 15);
             } else {
-                $asset_improvements = $query->get();
+                $asset_improvements = $query->where('asset_id', '=', $assetId)->get();
             }
 
             //return successful response
@@ -331,7 +276,6 @@ class AssetImprovementController extends Controller
     public function updateAssetImprovement($assetImprovementId, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'asset_id' => 'required|integer',
             'reporter' => 'required|string',
             'description' => 'required|string',
         ]);
@@ -345,7 +289,6 @@ class AssetImprovementController extends Controller
             if (!$asset_improvement) {
                 return response()->json(['error' => true, 'message' => 'AssetImprovement not found'], 406);
             }
-            $asset_improvement->asset_id = $request->input('asset_id');
             $asset_improvement->type = $request->input('type');
             $asset_improvement->status = $request->input('status');
             $asset_improvement->description = $request->input('description');
@@ -391,7 +334,9 @@ class AssetImprovementController extends Controller
             if (!$asset_improvement) {
                 return response()->json(['error' => true, 'message' => 'AssetImprovement not found'], 406);
             }
-            $asset_improvement->approved_by = $user->id;
+            if ($request->input('status') === "Setuju") {
+                $asset_improvement->approved_by = $user->id;
+            }
             $asset_improvement->status = $request->input('status');
             $asset_improvement->revision = $request->input('revision');
 
