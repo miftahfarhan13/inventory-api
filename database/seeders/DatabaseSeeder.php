@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Link;
 use App\Models\QuarterYear;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -36,6 +37,16 @@ class DatabaseSeeder extends Seeder
             'end_tw_3' => '2024-09-30',
             'start_tw_4' => '2024-10-01',
             'end_tw_4' => '2024-12-31',
+        ]);
+
+        Link::factory()->create([
+            'name' => 'Link Spreadsheet 1',
+            'url' => ''
+        ]);
+
+        Link::factory()->create([
+            'name' => 'Link Spreadsheet 2',
+            'url' => ''
         ]);
     }
 }

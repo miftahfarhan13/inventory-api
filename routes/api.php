@@ -93,3 +93,10 @@ Route::group([
     Route::get('/total-price-improvement', 'App\Http\Controllers\API\DashboardController@getTotalImprovementPriceByQuartalYear')->middleware('auth:sanctum');
     Route::get('/percentage-status', 'App\Http\Controllers\API\DashboardController@getPercentageStatusByQuartalYear')->middleware('auth:sanctum');
 });
+
+Route::group([
+    'prefix' => 'links'
+], function () {
+    Route::get('/', 'App\Http\Controllers\API\LinkController@getLinks')->middleware('auth:sanctum');
+    Route::post('update/{linkId}', 'App\Http\Controllers\API\LinkController@updateLink')->middleware('auth:sanctum');
+});
