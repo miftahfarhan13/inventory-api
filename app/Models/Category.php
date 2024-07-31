@@ -28,4 +28,9 @@ class Category extends Model
     {
         return $this->hasOne(User::class, 'id', 'created_by');
     }
+
+    public function asset()
+    {
+        return $this->hasMany(Asset::class, 'category_id', 'id');
+    }
 }

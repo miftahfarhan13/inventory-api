@@ -29,6 +29,16 @@ class AssetImprovement extends Model
         return $this->hasOne(Asset::class, 'id', 'asset_id');
     }
 
+    public function asset_category()
+    {
+        return $this->asset_query()->with('category');
+    }
+
+    public function category_asset()
+    {
+        return $this->hasOne(Category::class, 'id', 'category_id');
+    }
+
     public function asset()
     {
         return $this->asset_query()->with('location');

@@ -100,3 +100,12 @@ Route::group([
     Route::get('/', 'App\Http\Controllers\API\LinkController@getLinks')->middleware('auth:sanctum');
     Route::post('update/{linkId}', 'App\Http\Controllers\API\LinkController@updateLink')->middleware('auth:sanctum');
 });
+
+Route::group([
+    'prefix' => 'dashboard-wadek'
+], function () {
+    Route::get('/comparison-number-good-and-repair-assets', 'App\Http\Controllers\API\DashboardWadekController@getComparisonOfTheNumberOfGoodAndRepairAssets')->middleware('auth:sanctum');
+    Route::get('/total-asset-repair-fund', 'App\Http\Controllers\API\DashboardWadekController@getTotalAssetRepairFund')->middleware('auth:sanctum');
+    Route::get('/repair-time-asset', 'App\Http\Controllers\API\DashboardWadekController@getRepairTimeAsset')->middleware('auth:sanctum');
+    Route::get('/percentage-repair-asset', 'App\Http\Controllers\API\DashboardWadekController@getPercentageRepairAsset')->middleware('auth:sanctum');
+});
