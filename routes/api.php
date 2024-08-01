@@ -116,3 +116,10 @@ Route::group([
     Route::get('/total-asset-status-by-category', 'App\Http\Controllers\API\DashboardKaurController@getTotalAssetStatusByCategory')->middleware('auth:sanctum');
     Route::get('/asset-improvements', 'App\Http\Controllers\API\DashboardKaurController@getAssetImprovementsAdmin2')->middleware('auth:sanctum');
 });
+
+Route::group([
+    'prefix' => 'dashboard-laboran'
+], function () {
+    Route::get('/nearest-schedules-repair-asset', 'App\Http\Controllers\API\DashboardLaboranController@getNearestSchedulesRepairAsset')->middleware('auth:sanctum');
+    Route::get('/current-asset-repair-status', 'App\Http\Controllers\API\DashboardLaboranController@getCurrentAssetRepairStatus')->middleware('auth:sanctum');
+});
