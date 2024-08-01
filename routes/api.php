@@ -109,3 +109,10 @@ Route::group([
     Route::get('/repair-time-asset', 'App\Http\Controllers\API\DashboardWadekController@getRepairTimeAsset')->middleware('auth:sanctum');
     Route::get('/percentage-repair-asset', 'App\Http\Controllers\API\DashboardWadekController@getPercentageRepairAsset')->middleware('auth:sanctum');
 });
+
+Route::group([
+    'prefix' => 'dashboard-kaur'
+], function () {
+    Route::get('/total-asset-status-by-category', 'App\Http\Controllers\API\DashboardKaurController@getTotalAssetStatusByCategory')->middleware('auth:sanctum');
+    Route::get('/asset-improvements', 'App\Http\Controllers\API\DashboardKaurController@getAssetImprovementsAdmin2')->middleware('auth:sanctum');
+});
