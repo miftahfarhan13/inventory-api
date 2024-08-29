@@ -30,7 +30,6 @@ class DashboardWadekController extends Controller
             $start_tw_4 = $queryYear->start_tw_4;
             $end_tw_4 = $queryYear->end_tw_4;
 
-            $arrBaik = ['Baik'];
             $arrPerbaikan = ['Perbaikan Mandiri', 'Perbaikan Vendor'];
 
             $categories = Category::get();
@@ -45,25 +44,98 @@ class DashboardWadekController extends Controller
                 $id = $category->id;
                 $name = $category->name;
 
-                $totalBaik1 = Asset::whereIn('status', $arrBaik)->where('category_id', $id)->whereBetween('created_at', [$start_tw_1, $end_tw_1])->count();
                 $totalPerbaikan1 = Asset::whereIn('status', $arrPerbaikan)->where('category_id', $id)->whereBetween('created_at', [$start_tw_1, $end_tw_1])->count();
 
-                $totalBaik2 = Asset::whereIn('status', $arrBaik)->where('category_id', $id)->whereBetween('created_at', [$start_tw_2, $end_tw_2])->count();
                 $totalPerbaikan2 = Asset::whereIn('status', $arrPerbaikan)->where('category_id', $id)->whereBetween('created_at', [$start_tw_2, $end_tw_2])->count();
 
-                $totalBaik3 = Asset::whereIn('status', $arrBaik)->where('category_id', $id)->whereBetween('created_at', [$start_tw_3, $end_tw_3])->count();
                 $totalPerbaikan3 = Asset::whereIn('status', $arrPerbaikan)->where('category_id', $id)->whereBetween('created_at', [$start_tw_3, $end_tw_3])->count();
 
-                $totalBaik4 = Asset::whereIn('status', $arrBaik)->where('category_id', $id)->whereBetween('created_at', [$start_tw_4, $end_tw_4])->count();
                 $totalPerbaikan4 = Asset::whereIn('status', $arrPerbaikan)->where('category_id', $id)->whereBetween('created_at', [$start_tw_4, $end_tw_4])->count();
 
-                array_push($result_labels, $name . ' Baik');
                 array_push($result_labels, $name . ' Perbaikan');
 
-                array_push($result_data_tw_1, $totalBaik1, $totalPerbaikan1);
-                array_push($result_data_tw_2, $totalBaik2, $totalPerbaikan2);
-                array_push($result_data_tw_3, $totalBaik3, $totalPerbaikan3);
-                array_push($result_data_tw_4, $totalBaik4, $totalPerbaikan4);
+                array_push($result_data_tw_1, $totalPerbaikan1);
+                array_push($result_data_tw_2, $totalPerbaikan2);
+                array_push($result_data_tw_3, $totalPerbaikan3);
+                array_push($result_data_tw_4, $totalPerbaikan4);
+            }
+
+            $datasets = [[
+                'label' => 'Triwulan 1',
+                'data' => $result_data_tw_1,
+                'backgroundColor' => ['#156082']
+            ], [
+                'label' => 'Triwulan 2',
+                'data' => $result_data_tw_2,
+                'backgroundColor' => ['#e97132']
+            ], [
+                'label' => 'Triwulan 3',
+                'data' => $result_data_tw_3,
+                'backgroundColor' => ['#196b24']
+            ], [
+                'label' => 'Triwulan 4',
+                'data' => $result_data_tw_4,
+                'backgroundColor' => ['#0f9ed5']
+            ]];
+
+            $result = [
+                'labels' => $result_labels,
+                'datasets' => $datasets
+            ];
+            //return successful response
+            return response()->json(['error' => false, 'result' => $result], 200);
+        } catch (\Exception $e) {
+            //return error message
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 406);
+        }
+    }
+
+    public function getTotalGoodAsset(Request $request)
+    {
+        try {
+            $year = $request->input('year');
+            $queryYear = QuarterYear::where('year', $year)->first();
+
+            $start_tw_1 = $queryYear->start_tw_1;
+            $end_tw_1 = $queryYear->end_tw_1;
+
+            $start_tw_2 = $queryYear->start_tw_2;
+            $end_tw_2 = $queryYear->end_tw_2;
+
+            $start_tw_3 = $queryYear->start_tw_3;
+            $end_tw_3 = $queryYear->end_tw_3;
+
+            $start_tw_4 = $queryYear->start_tw_4;
+            $end_tw_4 = $queryYear->end_tw_4;
+
+            $arrBaik = ['Baik'];
+
+            $categories = Category::get();
+
+            $result_data_tw_1 = [];
+            $result_data_tw_2 = [];
+            $result_data_tw_3 = [];
+            $result_data_tw_4 = [];
+
+            $result_labels = [];
+            foreach ($categories as $category) {
+                $id = $category->id;
+                $name = $category->name;
+
+                $totalBaik1 = Asset::whereIn('status', $arrBaik)->where('category_id', $id)->whereBetween('created_at', [$start_tw_1, $end_tw_1])->count();
+
+                $totalBaik2 = Asset::whereIn('status', $arrBaik)->where('category_id', $id)->whereBetween('created_at', [$start_tw_2, $end_tw_2])->count();
+
+                $totalBaik3 = Asset::whereIn('status', $arrBaik)->where('category_id', $id)->whereBetween('created_at', [$start_tw_3, $end_tw_3])->count();
+
+                $totalBaik4 = Asset::whereIn('status', $arrBaik)->where('category_id', $id)->whereBetween('created_at', [$start_tw_4, $end_tw_4])->count();
+
+                array_push($result_labels, $name . ' Baik');
+
+                array_push($result_data_tw_1, $totalBaik1);
+                array_push($result_data_tw_2, $totalBaik2);
+                array_push($result_data_tw_3, $totalBaik3);
+                array_push($result_data_tw_4, $totalBaik4);
             }
 
             $datasets = [[
